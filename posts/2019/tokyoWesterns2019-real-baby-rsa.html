@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/icon.png" />
+    <title>ch0p5u3y's blog</title>
+    <meta name="author" content="ch0p5u3y" />
+    <meta name="description" content="Just CTF stuff." />
+    <meta name="keywords" content="CTF, reverse, pwn, crypto, stegonography, forensics, web, misc, exploitation, c, c++, python, assembly, security" />
+    <meta content="" property="fb:app_id">
+    <meta content="CTF Write-ups" property="og:site_name">
+
+    
+
+    
+      <meta content="CTF Write-ups" property="og:title">
+      <meta content="website" property="og:type">
+    
+
+    
+      <meta content="Just CTF stuff." property="og:description">
+    
+
+    
+      <meta content="http://localhost:4000/" property="og:url">
+    
+
+    
+
+    
+
+    
+
+    
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@github.io">
+    <meta name="twitter:creator" content="@github.io">
+
+    
+      <meta name="twitter:title" content="CTF Write-ups">
+    
+
+    
+      <meta name="twitter:url" content="http://localhost:4000/">
+    
+
+    
+      <meta name="twitter:description" content="Just CTF stuff.">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300italic,300,400italic,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+		<img class="rounded" src="/static/img/profile.png"
+		height="90" width="90">
+          <h1 class="author-name"><a href="/">ch0p5u3y</a></h1>
+          
+            <div class="profile-about">
+              Seek truths.
+            </div>
+          
+          <div class="social">
+            <ul>
+               
+                <li><a href="https://twitter.com/ch0p5u3y" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              
+                <li><a href="https://github.com/ch0p5u3y" target="_blank"><i class="fa fa-github"></i></a></li>
+
+		<li><a href="https://www.reddit.com/user/ch0p5u3y" target="_blank"><i class="fa fa-reddit-square"></i></a></li>
+              
+            </ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <strong>Navigation</strong>
+            <li><a href="/">Home</a></li>
+            
+              <li><a class="about" href="/about/">About</a></li>
+            
+              <li><a class="about" href="/categories/">Categories</a></li>
+            
+              <li><a class="about" href="/archive/">Archive</a></li>
+            
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      <div class="col-sm-9 main-layout">
+        <div id="home">
+  <h1>real-baby-rsa - TokyoWesterns CTF 2019</h1>
+  <hr />
+
+  <ul class="posts">
+
+    <h3 id="timedate">Sat 31 Aug. 2019, 01:00 BST - Mon 2 Sept. 2019, 01:00 BST</h3>
+    <p></p>
+    <p class="text">Summary: A beginner crypto challenge which requires basic python scripting skills.</p>
+
+    <p class="text">With this challenge we are given 2 files, the first being a file called <a href="https://github.com/Ch0p5u3y/CTF_files/blob/master/2019/real-baby-rsa/output">output</a> with 27 massive numbers inside of it. The second file is called <a href="https://github.com/Ch0p5u3y/CTF_files/blob/master/2019/real-baby-rsa/problem.py">problem.py</a> and it is a basic python script which has been used to generate the numbers in output.</p>
+    <img src="screenshots/real-baby-rsa/1.png">
+    <br>
+    <p class="text">The majority of this script is pretty simple, it uses a for loop to iterate through each character in the flag variable and then prints it's output.<br>As for the output this is a calculation which uses the pow function along with 3 other variables. The first variable is ord(char) which returns an integer based on the Unicode point of char (e.g. ord("a") returns 97).<br>The next variable is e which is the number that will be powered with our first variable.<br>And the final variable N is our large number which whill be used for the modulus operation on the result of the previous two variables. So we now know how the script is encrypting the flag and we can work towards decrypting it by borrowing some of the code from problem.py and using it inside our own <a href="https://github.com/Ch0p5u3y/CTF_files/blob/master/2019/real-baby-rsa/brute.py">script</a>!</p>
+    <img src="screenshots/real-baby-rsa/2.png">
+    <br>
+    <p class="text">Here is the output of the script I wrote, it isn't the most elegant code but it works. Let's put these into order and see what we get!</p>
+    <img src="screenshots/real-baby-rsa/3.png">
+    <br>
+    <p class="text">Looks like we're missing a few letters, specifically the 4th, 10th, 15th, 17th, 18th, 20th, 24th, 25th and 26th letters. However this isn't an issue as these missing letters are merely just duplicates hence why the script hasn't printed them. All we need to do is search for the value of each missing letter in our script and match them up with the ones we already know and voila!</p>
+    <img src="screenshots/real-baby-rsa/4.png">
+  </ul>
+</div><!-- end #home -->
+
+        <footer>
+          &copy; ch0p5u3y 2019
+        </footer>
+      </div>
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+  </body>
+</html>
+
