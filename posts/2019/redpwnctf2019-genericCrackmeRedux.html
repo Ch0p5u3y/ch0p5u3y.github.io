@@ -128,7 +128,7 @@
     <p class="text">Once we've loaded the binary into r2 we have to run a few commands. First we analyze the current list of functions (afl), then we analyze the main function (af@main) and finally we print the disassembled function (pdf@main). Now we need to analyze the assembly code, most of it we can ignore but I've highlighted the important parts.</p>
     <ol>
 	<li class="text" id="list"><p class="text">This first chunk of code merely prints the prompt message for the user's input.</p></li>
-	<li class="text" id="list"><p class="text">This second chunk loads variable ch into rax, moves rax into rsi and then loads the format string '%d' into rdi. This format string tells us the program is expecting a decimal number</p></li>
+	<li class="text" id="list"><p class="text">This second chunk loads variable ch into rax, moves rax into rsi and then loads the format string '%d' into rdi. This format string tells us the program is expecting a decimal number.</p></li>
 	<li class="text" id="list"><p class="text">This last chunk of code calls the C scanf function to take the user's input which is then stored into variable ch, ch is then moved into eax, eax is moved into edi and finally a strange function '0x1169' is called.</p></li>
     </ol>
     <p class="text">So now we know how the program is taking user input, what kind of input the program expects from the user and we also know where this input is being passed to! Next we need to take a closer look at function 0x1169 to see what it's doing with our input. So in r2 we analyze this function (af@0x1169), then we print the function's disassembled code (pdf@0x1169) and open sesame!</p>
