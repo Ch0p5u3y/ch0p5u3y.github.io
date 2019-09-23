@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="/static/img/icon.png" />
-    <title>ch0p5u3y's blog</title>
+    <title>reversible sneaky algorithm#0 - NACTF 2019</title>
     <meta name="author" content="ch0p5u3y" />
     <meta name="description" content="Just CTF stuff." />
     <meta name="keywords" content="CTF, reverse, pwn, crypto, stegonography, forensics, web, misc, exploitation, c, c++, python, assembly, security" />
@@ -107,58 +107,26 @@
         </div>
         <!-- end /.fixed-condition -->
       </div>
-      <div class="col-sm-8 col-offset-1 main-layout">
+      <div class="col-sm-9 main-layout">
         <div id="home">
-  <h1>CTF Write-ups</h1>
+  <h1>genericCrackmeRedux - RedpwnCTF 2019</h1>
   <hr />
 
   <ul class="posts">
-    
-	  <!-- template for top post
-	  <li><h2>xx xxx xxxx | <a href="">xxxx</a></h2>
-          <p></p>
-	  <p><a href="">xxxx</a> <i>&raquo;</i> xxxx</p></li>-->
 
-	  <li><h2>23 Sept 2019 | <a href="/categories/">CRYPTO</a></h2>
-          <p></p>
-	  <p><a href="/posts/2019/nactf2019-reversible_sneaky_algorithm_0.html">reversible_sneaky_algorithm#0</a> <i>&raquo;</i> NACTF 2019</p></li>
+    <h3 id="timedate">Tue, 17 Sept. 2019, 22:00 UTC - Sun, 22 Sept. 2019, 22:00 UT</h3>
+    <p></p>
+    <p class="text">Summary: A simple crypto challenge requiring basic scripting skils and some knowledge of RSA encryption.</p>
 
-	  <li class="lower"><h2>23 Sept 2019 | <a href="/categories/">VM/BOXES</a></h2>
-          <p></p>
-	  <p><a href="/posts/2019/silkyctf_0x02.html">Silky-CTF: 0x02</a> <i>&raquo;</i> Vulnhub</p></li>
-
-	  <li class="lower"><h2>23 Sept 2019 | <a href="/categories/">VM/BOXES</a></h2>
-          <p></p>
-	  <p><a href="/posts/2019/silkyctf_0x01.html">Silky-CTF: 0x01</a> <i>&raquo;</i> Vulnhub</p></li>
-
-	  <li class="lower"><h2>03 Sept 2019 | <a href="/categories/">CRYPTO</a></h2>
-          <p></p>
-          <p><a href="/posts/2019/tokyoWesterns2019-real-baby-rsa.html">real-baby-rsa</a> <i>&raquo;</i> TokyoWesterns CTF 2019</p>
-	  <p class="text">A beginner crypto challenge which requires basic python scripting skills.</p></li>
-
-	  <li id="lower"><h2>03 Sept 2019 | <a href="/categories/">FORENSICS</a></h2>
-          <p></p>
-          <p><a href="/posts/2019/chaoscommunicationcamp2019-flagconverterpart1.html">flagconverterpart1</a> <i>&raquo;</i> Chaos Communication Camp 2019</p>
-	  <p class="text">A ridiculously easy to solve forensics challenge, if done the incorrect (or maybe correct?) way.</p></li>
-
-  	  <li id="lower"><h2>03 Sept 2019 | <a href="/categories/">MISC</a></h2>
-          <p></p>
-          <p><a href="/posts/2019/hackcon2019-weird_text.html">weird_text</a> <i>&raquo;</i> HackCon 2019</p>
-	  <p class="text">A decoding challenge that requires some knowledge of esoteric programming languages.</p></li>
-
-	  <li id="lower"><h2>03 Sept 2019 | <a href="/categories/">REVERSE</a></h2>
-          <p></p>
-	  <p><a href="/posts/2019/redpwnctf2019-genericCrackmeRedux.html">genericCrackmeRedux</a> <i>&raquo;</i> RedpwnCTF 2019</p>
-	  <p class="text">A simple reverse engineering challenge requiring basic knowledge of assembly along with basic python scripting skills.</p></li>
-
-	  <!-- template for lower posts
-	  <li class="lower"><h2>xx xxx xxxx | <a href="">xxxx</a></h2>
-          <p></p>
-	  <p><a href="">xxxx</a> <i>&raquo;</i> xxxx</p></li>-->
-
-    
-    
-  </ul>
+    <p class="text">Starting this challenge off we are given a <a href="https://github.com/Ch0p5u3y/CTF_files/blob/master/2019/reversible_sneaky_algorithm%230/rsa.txt">text file</a> with the following large numbers in it.<p>
+    <img src="screenshots/reversible_sneaky_algorithm_0/1.png">
+    <p class="text">Looking through RSA's <a href="https://en.wikipedia.org/wiki/RSA_(cryptosystem)">wikipedia page</a> specifically the decryption section, the following formula tells us how to use these numbers to decrypt the message!</p>
+    <img src="screenshots/reversible_sneaky_algorithm_0/2.png">
+    <p class="text">So all we need to do is power d to c and the modulus the result with n, this can be achieved with a simple <a href="https://github.com/Ch0p5u3y/CTF_files/blob/master/2019/reversible_sneaky_algorithm%230/solve.py">python script</a>! Let's run the script and see what output we get!</p>
+    <img src="screenshots/reversible_sneaky_algorithm_0/3.png">
+    <p class="text">And looks like it decoded to hex, all we have to do is use this <a href="https://www.rapidtables.com/convert/number/hex-to-ascii.html">hex converter</a> to get the flag!</p>
+    <img src="screenshots/reversible_sneaky_algorithm_0/4.png">
+ </ul>
 </div><!-- end #home -->
 
         <footer>
@@ -180,45 +148,3 @@
   </body>
 </html>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--There is a hidden message on one of these pages. Can you find it?-->
