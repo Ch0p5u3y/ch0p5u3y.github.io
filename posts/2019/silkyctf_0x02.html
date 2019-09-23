@@ -150,7 +150,7 @@
     <img src="screenshots/SilkyCTF_0x02/14.png"> 
     <p class="text">This time there was no bash history for us to snoop on but looking at SUIDs we find a peculiar program called cat_shadow. Using the same method we did with LinEnum, but reverse roles, we exfiltrate cat_shadow to our attacking machine for analysis.</p>
     <img src="screenshots/SilkyCTF_0x02/15.png">
-    <p class="text">As we can see by looking at the assembly code with radare2 there is a cmp instruction on the 21st line, it is comparing eax to the hexadecimal value of string "bYlI. Let's run the program on the victim machine and see how it behaves."</p>
+    <p class="text">As we can see by looking at the assembly code with radare2 there is a cmp instruction on the 21st line, it is comparing eax to the hexadecimal value of string "bYlI". Let's run the program on the victim machine and see how it behaves."</p>
     <img src="screenshots/SilkyCTF_0x02/16.png">
     <p class="text">So the program trys to cat the shadow file containing the system user's password hashes, as we can see from the output eax is completely empty when it is comapared to 0x496c5962. Let's generate a payload to insert into the binary using python.</p>
     <img src="screenshots/SilkyCTF_0x02/17.png">
@@ -161,7 +161,7 @@
     <img src="screenshots/SilkyCTF_0x02/20.png">
     <p class="text">Now we have the hash of root's password we can attempt to crack it using hashcat. Use this <a href="https://hashcat.net/wiki/doku.php?id=example_hashes">page</a> to identify what kind of hash we have and this <a href="https://www.infosecured.org/2017/01/06/password-cracking-with-hashcat/">link</a> for guidance on how to use hashcat. Mine took no time as I had already cracked it by the time of editing this writeup, but the time it takes for hashcat to crack the hash depends on your hardware.</p>
     <img src="screenshots/SilkyCTF_0x02/21.png">
-    Next all that is left to is to use su (switch user) command to switch to root with the password greygrey and cat the flags!
+    <p class="text">Next all that is left to is to use su (switch user) command to switch to root with the password greygrey and cat the flags!</p>
     <img src="screenshots/SilkyCTF_0x02/22.png">
     <img src="screenshots/SilkyCTF_0x02/23.png">
     
