@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/icon.png" />
+    <title>Silky-CTF_0x01</title>
+    <meta name="author" content="ch0p5u3y" />
+    <meta name="description" content="Just CTF stuff." />
+    <meta name="keywords" content="CTF, reverse, pwn, crypto, stegonography, forensics, web, misc, exploitation, c, c++, python, assembly, security" />
+    <meta content="" property="fb:app_id">
+    <meta content="CTF Write-ups" property="og:site_name">
+
+    
+
+    
+      <meta content="CTF Write-ups" property="og:title">
+      <meta content="website" property="og:type">
+    
+
+    
+      <meta content="Just CTF stuff." property="og:description">
+    
+
+    
+      <meta content="http://localhost:4000/" property="og:url">
+    
+
+    
+
+    
+
+    
+
+    
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@github.io">
+    <meta name="twitter:creator" content="@github.io">
+
+    
+      <meta name="twitter:title" content="CTF Write-ups">
+    
+
+    
+      <meta name="twitter:url" content="http://localhost:4000/">
+    
+
+    
+      <meta name="twitter:description" content="Just CTF stuff.">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300italic,300,400italic,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+		<img class="rounded" src="/static/img/profile.png"
+		height="90" width="90">
+          <h1 class="author-name"><a href="/">ch0p5u3y</a></h1>
+          
+            <div class="profile-about">
+              Seek truths.
+            </div>
+          
+          <div class="social">
+            <ul>
+               
+                <li><a href="https://twitter.com/ch0p5u3y" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              
+                <li><a href="https://github.com/ch0p5u3y" target="_blank"><i class="fa fa-github"></i></a></li>
+
+		<li><a href="https://www.reddit.com/user/ch0p5u3y" target="_blank"><i class="fa fa-reddit-square"></i></a></li>
+              
+            </ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <strong>Navigation</strong>
+            <li><a href="/">Home</a></li>
+            
+              <li><a class="about" href="/about/">About</a></li>
+            
+              <li><a class="about" href="/categories/">Categories</a></li>
+            
+              <li><a class="about" href="/archive/">Archive</a></li>
+            
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      <div class="col-sm-9 main-layout">
+        <div id="home">
+  <h1>Silky-CTF_0x01</h1>
+  <hr />
+
+  <ul class="posts">
+
+    <h3 id="timedate">Released: 27 Apr 2019</h3>
+    <p></p>
+    <p class="text">Summary: A beginner boot2root requiring basic penetration testing skills as well as basic scripting skills.</p>
+
+    <p class="text">Once you have the <a href="https://www.vulnhub.com/entry/silky-ctf-0x01,306/">VM</a> set up go ahead and do a quick ping sweep on your network to find the IP address of the machine.<p>
+    <img src="screenshots/SilkyCTF_0x01/1.png">
+    <p class="text">Now we know the IP of the machine we scan all ports to see which are open with the <i>-p-</i> option in nmap.</p>
+    <img src="screenshots/SilkyCTF_0x01/2.png">
+    <p class="text">So we have just 2 ports open 22 for ssh and 80 for http, on port 80 we can see one disallowed entry in robots.txt called notes.txt. Let's open this in our browser and see what we find.</p>
+    <img src="screenshots/SilkyCTF_0x01/3.png">
+    <p class="text">Seems to be in German, let's throw it into Google translate and see if we can make sense of it.</p>
+    <img src="screenshots/SilkyCTF_0x01/4.png">
+    <p class="text">So what we can gather from this is that there is a password hidden somewhere on one of the pages on this site, and sure enough looking at the source code in index.html we see a singular js file with the following comment inside it.</p>
+    <img src="screenshots/SilkyCTF_0x01/5.png">
+    <p class="text">So this comment must be the password the note was talking about and as we know from what the note said it is missing it's last two charactes. To find these two characters and get the whole password we can bruteforce them with a simple <a href="https://github.com/Ch0p5u3y/CTF_files/blob/master/2019/SilkyCTF_0x01/passGen.py">script</a> and generate ourselves a wordlist! With this wordlist we can now try to bruteforce the SSH service on port 22 using Hydra, first I tried the user admin but failed (if only it was that easy), then taking inspiration from the box's name I used the user silky and voila.</p>
+    <img src="screenshots/SilkyCTF_0x01/6.png">
+    <p class="text">Now we access the machine with the login silky let's connect to SSH, drop into /tmp and use nc to grab an enumeration script from our attacking machine called <a href="https://github.com/rebootuser/LinEnum">LinEnum</a>. For guidance on how to pass files to and from machines with nc check this <a href="https://nakkaya.com/2009/04/15/using-netcat-for-file-transfers/">link</a> out.</p>
+    <p class="text">Before we do any analysis of this bianry let's run it on the victim machine and see what it does</p>
+    <p class="text"></p>
+    <p class="text"></p>
+    <p class="text"></p>
+    <p class="text"></p>
+    <img src="screenshots/SilkyCTF_0x01/7.png">
+    <p class="text" style="text-align: center;"><i>Victim machine</i></p>
+    <img src="screenshots/SilkyCTF_0x01/8.png">
+    <p class="text" style="text-align: center;"><i>Attacking machine</i></p>
+    <p class="text">Now let's make our script executable, run it and see what we find!</p>
+    <img src="screenshots/SilkyCTF_0x01/9.png">
+    <img src="screenshots/SilkyCTF_0x01/10.png">
+    <p class="text">Looking through the script's output I noticed a peculiar SUID named sky and sure enough looking at the bash history this has been compiled from custom C code written by the user, this makes this program potentially vulnerable so let's exfiltrate it!</p>
+    <img src="screenshots/SilkyCTF_0x01/11.png">
+    <p class="text" style="text-align: center;"><i>Attacking machine</i></p>
+    <img src="screenshots/SilkyCTF_0x01/12.png">
+    <p class="text" style="text-align: center;"><i>Victim machine</i></p>
+    <p class="text">Before we do any analysis on this binary let's run it on the victim machine and see what it actually does.</p>
+    <img src="screenshots/SilkyCTF_0x01/13.png">
+    <p class="text">So the output looks like more German plus the user root, let's translate the German and see if we get another clue.</p>
+    <img src="screenshots/SilkyCTF_0x01/14.png">
+    <p class="text">Hmmmm, seems more cryptic than helpful. Let's take a look at the binary on our attacking machine using radare2.</p>
+    <img src="screenshots/SilkyCTF_0x01/15.png">
+    <p class="text">From looking at this code in the main function it seems to load rdi on the 6th line which contains a string argument, this argument is the German message and the whoami command explaining why it prints root (as the SUID is running as root). However it does not use an absolute path for the whoami command (e.g. "/usr/bin/whoami") which means we can exploit this by making our own whoami file in /tmp which contains the command or code we want to run, make it executable using chmod, change the PATH environment variable and finally running sky again to execute our custom file. As you can see below I chose to use /bin/sh since the binary is running as root this will give us a root shell and allow us to find the flag!</p> 
+    <img src="screenshots/SilkyCTF_0x01/16.png">
+  </ul>
+</div><!-- end #home -->
+
+        <footer>
+          &copy; ch0p5u3y 2019
+        </footer>
+      </div>
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+  </body>
+</html>
+
