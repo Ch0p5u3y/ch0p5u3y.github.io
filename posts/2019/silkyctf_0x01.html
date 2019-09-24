@@ -131,7 +131,6 @@
     <p class="text">So this comment must be the password the note was talking about and as we know from what the note said it is missing it's last two charactes. To find these two characters and get the whole password we can bruteforce them with a simple <a href="https://github.com/Ch0p5u3y/CTF_files/blob/master/2019/SilkyCTF_0x01/passGen.py">script</a> and generate ourselves a wordlist! With this wordlist we can now try to bruteforce the SSH service on port 22 using Hydra, first I tried the user admin but failed (if only it was that easy), then taking inspiration from the box's name I used the user silky and voila.</p>
     <img src="screenshots/SilkyCTF_0x01/6.png">
     <p class="text">Now we access the machine with the login silky let's connect to SSH, drop into /tmp and use nc to grab an enumeration script from our attacking machine called <a href="https://github.com/rebootuser/LinEnum">LinEnum</a>. For guidance on how to pass files to and from machines with nc check this <a href="https://nakkaya.com/2009/04/15/using-netcat-for-file-transfers/">link</a> out.</p>
-    <p class="text">Before we do any analysis of this bianry let's run it on the victim machine and see what it does</p>
     <p class="text"></p>
     <p class="text"></p>
     <p class="text"></p>
