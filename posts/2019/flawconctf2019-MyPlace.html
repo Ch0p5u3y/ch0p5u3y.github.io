@@ -5,51 +5,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="/static/img/500px-Glider.svg.png" />
-    <title>ch0p5u3y's blog</title>
+    <title>MyPlace - FlawconCTF2019</title>
     <meta name="author" content="ch0p5u3y" />
-    <meta name="description" content="Just CTF stuff." />
+    <meta name="description" content="A simple web challenge." />
     <meta name="keywords" content="CTF, reverse, pwn, crypto, stegonography, forensics, web, misc, exploitation, c, c++, python, assembly, security" />
-    <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml">
     <meta content="" property="fb:app_id">
-    <meta content="CTF Write-ups" property="og:site_name">
+    <meta content="ch0p5u3y" property="og:site_name">
 
     
 
     
-      <meta content="CTF Write-ups" property="og:title">
+      <meta content="MyPlace - FlawconCTF2019" property="og:title">
       <meta content="website" property="og:type">
     
 
     
-      <meta content="Just CTF stuff." property="og:description">
-    
+      <meta content="A simple web challenge." property="og:description">
+      <meta content="screenshots/MyPlace/1.png" property="og:image">
 
     
-      <meta content="http://localhost:4000/" property="og:url">
+      <meta name="twitter:title" content="MyPlace - FlawconCTF2019">
     
-
+      <meta name="twitter:image" content="screenshots/MyPlace/1.png">
     
-
-    
-
-    
-
-    
-
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:site" content="@github.io">
-    <meta name="twitter:creator" content="@github.io">
-
-    
-      <meta name="twitter:title" content="CTF Write-ups">
-    
-
-    
-      <meta name="twitter:url" content="http://localhost:4000/">
-    
-
-    
-      <meta name="twitter:description" content="Just CTF stuff.">
+      <meta name="twitter:description" content="A simple web challenge.">
     
 
     
@@ -85,9 +64,11 @@
           <div class="social">
             <ul>
                
-                <li><a href="#" target="_blank"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="https://twitter.com/ch0p5u3y" target="_blank"><i class="fa fa-twitter"></i></a></li>
               
-                <li><a href="https://github.com/agusmakmun" target="_blank"><i class="fa fa-github"></i></a></li>
+                <li><a href="https://github.com/ch0p5u3y" target="_blank"><i class="fa fa-github"></i></a></li>
+
+		<li><a href="https://www.reddit.com/user/ch0p5u3y" target="_blank"><i class="fa fa-reddit-square"></i></a></li>
               
             </ul>
           </div>
@@ -98,36 +79,52 @@
             
               <li><a class="about" href="/about/">About</a></li>
             
-              <li><a class="about" href="/projects/">Categories</a></li>
+              <li><a class="about" href="/categories/">Categories</a></li>
             
-              <li><a class="about" href="/feed.xml">Archive</a></li>
+              <li><a class="about" href="/archive/">Archive</a></li>
             
           </ul>
         </div>
         <!-- end /.fixed-condition -->
       </div>
-      <div class="col-sm-8 col-offset-1 main-layout">
+      <div class="col-sm-9 main-layout">
         <div id="home">
-  <h1>CTF Write-ups</h1>
+  <h1>MyPlace - FlawconCTF2019</h1>
   <hr />
 
   <ul class="posts">
+    <h3 id="timedate">Mon, 14 Oct. 2019, 16:00 BST - Sun, 20 Oct. 2019, 16:00 BST</h3>
+    <p></p>
+    <p class="text">Summary: A simple web challenge requiring basic knowledge of web technologies and basic penetration testing skills.</p>
     
-	  <li><h2>xx xxx xxxx | <a href="">xxxx</a></h2>
-          <p></p>
-	  <p><a href="">xxxx</a> <i>&raquo;</i> xxxx</p></li>
-
-	  <li id="lower"><h2>20 Aug 2019 | <a href="">REVERSE</a></h2>
-          <p></p>
-	  <p><a href="">genericCrackmeRedux</a> <i>&raquo;</i> RedpwnCTF 2019</p></li>
-
-	  <!-- template for lower posts
-	  <li class="lower"><h2>xx xxx xxxx | <a href="">xxxx</a></h2>
-          <p></p>
-	  <p><a href="">xxxx</a> <i>&raquo;</i> xxxx</p></li>-->
-
-    
-    
+    <p class="text">This was a CTF hosted by <a href="https://twitter.com/flawcon">Flawcon</a> and <a href="https://twitter.com/mcrgreyhats">Manchester Grey Hats</a> in my hometown of Manchester!</br>Starting off we are presented with a standard looking website. We quickly notice a login page and try a few common attacks (intercepting and replaying traffic, SQLi, XSS etc.) but to no avail.</p>
+    <img src="screenshots/MyPlace/1.png">
+    <p></p>
+    <img src="screenshots/MyPlace/2.png">
+    <p></p>
+    <p class="text">After some digging through the Javascript files we came across a script called profile.js, in this script on the 4th line we can see a http GET request being sent to retrieve information about a particular user.</p>
+    <img src="screenshots/MyPlace/3.png">
+    <p></p>
+    <p class="text">As this is being handled within the Javascript code this means that the request is being made by the client instead of the server allowing us the ability to interract with the API ourselves, and sure enough by sending a GET request to '/api/users' we are able to dump all of the user data from the site like so.</p>
+    <img src="screenshots/MyPlace/4.png">
+    <p></p>
+    <p class="text">As you can see highlighted above we have found the admin account with a hashed password, let's run the hash through hash-identifier and see what we get.</p>
+    <img src="screenshots/MyPlace/5.png">
+    <p></p>
+    <img src="screenshots/MyPlace/6.png">
+    <p></p>
+    <p class="text">Now we know which algorithm has been most likely used we can crack the password using John The Ripper, if you look at the help for john the -w flag is used to specify a wordlist and the --format= flag is used to specify the hash type. For me the command format was <code>john -w /usr/share/wordlists/rockyou.txt pass.hash --format=Raw-SHA256</code> </br>which gave us the following output.</p>
+    <img src="screenshots/MyPlace/7.png">
+    <p></p>
+    <p class="text">Now we have the password 'manchester' all that's left to do is login to the admin account...</p>
+    <img src="screenshots/MyPlace/8.png">
+    <p></p>
+    <p class="text">Download the backup file from the site...</p>
+    <img src="screenshots/MyPlace/9.png">
+    <p></p>
+    <p class="text">And voila, we have our flag!</p>
+    <img src="screenshots/MyPlace/10.png">
+    <p></p>
   </ul>
 </div><!-- end #home -->
 
