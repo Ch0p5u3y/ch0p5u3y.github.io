@@ -6,6 +6,12 @@ body {
   color: #000;
 }
 
+code {
+  background-color: #000;
+  display: block;
+  text-align: left;
+}
+
 hr {
   margin-top: 20px;
   margin-bottom: 20px;
