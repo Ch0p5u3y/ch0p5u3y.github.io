@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/500px-Glider.svg.png" />
+    <title>Haystack - HackTheBox</title>
+    <meta name="author" content="ch0p5u3y" />
+    <meta name="description" content="An easy level machine hosted on HackTheBox requiring exploitation of the ELK stack." />
+    <meta name="keywords" content="CTF, reverse, pwn, crypto, stegonography, forensics, web, misc, exploitation, c, c++, python, assembly, security" />
+    <meta content="" property="fb:app_id">
+    <meta content="ch0p5u3y" property="og:site_name">
+
+    
+
+    
+      <meta content="Haystack - HackTheBox" property="og:title">
+      <meta content="website" property="og:type">
+      <meta content="/static/img/kenaz.png" property="og:image">
+
+    
+      <meta content="An easy level machine hosted on HackTheBox requiring exploitation of the ELK stack." property="og:description">
+
+      <meta name="twitter:image" content="/static/img/kenaz.png">
+      <meta name="twitter:title" content="Haystack - HackTheBox">
+    
+      <meta name="twitter:description" content="An easy level machine hosted on HackTheBox requiring exploitation of the ELK stack.">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300italic,300,400italic,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+		<img class="rounded" src="/static/img/kenaz.png"
+		height="90" width="90">
+          <h1 class="author-name"><a href="/">ch0p5u3y</a></h1>
+          
+            <div class="profile-about">
+              Seek truths.
+            </div>
+          
+          <div class="social">
+            <ul>
+               
+                <li><a href="https://twitter.com/ch0p5u3y" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              
+                <li><a href="https://github.com/ch0p5u3y" target="_blank"><i class="fa fa-github"></i></a></li>
+
+		<li><a href="https://www.reddit.com/user/ch0p5u3y" target="_blank"><i class="fa fa-reddit-square"></i></a></li>
+              
+            </ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <strong>Navigation</strong>
+            <li><a href="/">Home</a></li>
+            
+              <li><a class="about" href="/about/">About</a></li>
+            
+              <li><a class="about" href="/categories/">Categories</a></li>
+            
+              <li><a class="about" href="/archive/">Archive</a></li>
+            
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      <div class="col-sm-9 main-layout">
+        <div id="home">
+  <h1>Haystack - HackTheBox</h1>
+  <hr />
+
+  <ul class="posts">
+    <h3 id="timedate">Released: 29th June 2019 - Retired: 2nd November 2019</h3>
+    <p></p>
+    <p class="text">Summary: An easy difficulty machine hosted on HackTheBox requiring exploitation of the ELK stack.</p>
+    
+    <p class="text"><a href="https://github.com/TikvahTerminator">Tikvah</a> and myself worked on rooting this box together, please go check his projects out and show him some love! <3 </br>First we head over to the web page being hosted by the box and are greeted with this image.</p>
+    <img src="screenshots/Haystack/1.png">
+    <p></p>
+    <p class="text">We downloaded the image, ran it through strings and found base64 hidden inside the file.</p>
+    <img src="screenshots/Haystack/2.png">
+    <p></p>
+    <p class="text">Decoding it using openssl we find that the message is in Spanish. We translate it using Google and get the following.</p>
+    <img src="screenshots/Haystack/3.png">
+    <p></p>
+    <img src="screenshots/Haystack/4.png">
+    <p></p>
+    <p class="text">With not much else to go on from here we began enumerating the services on the box using Nmap.</p>
+    <img src="screenshots/Haystack/5.png">
+    <p></p>
+    <img src="screenshots/Haystack/6.png">
+    <p></p>
+    <p class="text">Whilst port 22 and 80 are commonplace in most of these boxes, port 9200 is not typically seen open. After some research we connected to the port via our browser and discovered that the box is running Elasticsearch. The tagline 'You Know, for Search' is a hint to the next step.</p>
+    <img src="screenshots/Haystack/7.png">
+    <p></p>
+    <p class="text">After some digging around we discovered that Elasticsearch has a built in <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search-search.html">search API</a>. After navigating to this API we are presented with various bits of data such as _id, _index, _type etc. We are also shown another service which appears to be running on the box, Kibana and it's version 6.4.2, make note of this for later.</p>
+    <img src="screenshots/Haystack/8.png">
+    <p></p>
+    <p class="text">Again we hit a wall so we decided to play around with the API a little. First we queried one of the _id numbers 44 like so '_search?q=_id:44' which revealed many more pieces of data to look through. One specifically of interest was the _index type "quotes", we again queried this using the API like so '_search?q=_index:quotes' and it returned a considerable amount of results.</p>
+    <img src="screenshots/Haystack/9.png">
+    <p></p>
+    <img src="screenshots/Haystack/10.png">
+    <p></p>
+    <p class="text">We again ran out of ideas here and began digging around the web some more. Eventually we came across a tool called <a href="https://github.com/taskrabbit/elasticsearch-dump">elasticdump</a> and after some fiddling around trying to get it to install then some more trying to get it to run, we were able to dump all of the "quotes" data. Once we had the dump all that was left to do was find the needle in the haystack!</p>
+    <img src="screenshots/Haystack/11.png">
+    <p></p>
+    <p class="text">Think back to the base64 encoded message in the image from when we first connected to this box. 'la aguja en el pajar es "clave"' translated to 'the needle in the haystack is "key"'. So all we had to do was run the dump through cat and pipe the output into grep using clave as our keyword and voila!</p>
+    <img src="screenshots/Haystack/12.png">
+    <p></p>
+    <p class="text">Now all that's left to do is translate the Spanish to English and decode the base64 messages and we have the credentials we need to gain a foothold onto the box!</p>
+    <img src="screenshots/Haystack/13.png">
+    <p></p>
+    <img src="screenshots/Haystack/14.png">
+    <p></p>
+    <p class="text">Using these credentials we login via SSH and we now have the user flag!</p>
+    <img src="screenshots/Haystack/15.png">
+    <p></p>
+    <p class="text">This is where the difficulty of the box steps up a notch. Recall before when we found that another service called Kibana was running on this box. Now we have a foothold we search for this service using whereis and take a look at it's config file 'kibana.yml', from this we are able to determine that it is running locally on port 5601.</p>
+    <img src="screenshots/Haystack/16.png">
+    <p></p>
+    <img src="screenshots/Haystack/17.png">
+    <p></p>
+    <p class="text">After some more searching the web we find that this version of Kibana, 6.4.2, is vulnerable to <a href="https://github.com/mpgn/CVE-2018-17246">CVE-2018-17246</a> a local file inclusion vulnerability which would allow us to gain a <a href="https://github.com/appsecco/vulnerable-apps/tree/master/node-reverse-shell">reverse shell</a> on the application. All we need to do is tweak the shell to connect to our own IP like so.</p>
+    <img src="screenshots/Haystack/18.png">
+    <p></p>
+    <img src="screenshots/Haystack/19.png">
+    <p></p>
+    <p class="text">It took some fiddling around to get this right as described in the link to the CVE, node's module caching feature will cache any filename it is passed, meaning we can't use the same file to spawn a shell twice. All we need to do is set up a netcat listener on our own machine, from the victim machine save our shell to '/tmp/' and then make a local request to our shell using curl, wait about a minute and our listener should catch that shell!</p>
+    <img src="screenshots/Haystack/20.png">
+    <p class="text" style="text-align: center;"><i>Victim machine</i></p>
+    <img src="screenshots/Haystack/21.png">
+    <p class="text" style="text-align: center;"><i>Attacking machine</i></p>
+    <p class="text">So now we have access to the kibana user our next step is to exploit the last segment of the ELK stack which is Logstash. After finding the config files we take a look at them to find a way to escalate our privileges further. In input.conf we can see it is looking for files in the path "/opt/kibana/logstash_*" the asterisk at the end is a wildcard meaning this config file will execute all files starting with 'logstash_' in that specific directory.</p>
+    <img src="screenshots/Haystack/22.png">
+    <p></p>
+    <p class="text">The next config file filter.conf is using <a href="https://www.elastic.co/guide/en/logstash/current/plugins-filters-grok.html">grok filtering</a> to take files that have their type set to 'execute' and are then matching the message inside the file with "Ejecutar\s*comando\s*:\s+%{GREEDYDATA:comando}". The last config file output.conf merely takes the selected file and executes it as a shell command.</p>
+    <img src="screenshots/Haystack/22.png">
+    <p></p>
+    <p class="text">So all we need to do to exploit this is create our own file in /opt/kibana/, the file name needs to start with 'logstash_', containing the following format "Ejecutar comando: [our command]" to execute a command of our choosing. Like before we'll leverage netcat to catch a reverse shell like so!</p>
+    <img src="screenshots/Haystack/24.png">
+    <p class="text" style="text-align: center;"><i>Victim machine</i></p>
+    <img src="screenshots/Haystack/25.png">
+    <p class="text" style="text-align: center;"><i>Attacking machine</i></p>
+    <p class="text">The shell may take a few minutes until it connects but once it does all that's left to do is navigate to the root directory and capture the root flag to own the box!</p>
+  </ul>
+</div><!-- end #home -->
+
+        <footer>
+          &copy; ch0p5u3y 2019
+        </footer>
+      </div>
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+  </body>
+</html>
+
+
