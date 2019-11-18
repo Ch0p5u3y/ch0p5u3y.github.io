@@ -154,7 +154,7 @@
     <img src="screenshots/Haystack/22.png">
     <p></p>
     <p class="text">The next config file filter.conf is using <a href="https://www.elastic.co/guide/en/logstash/current/plugins-filters-grok.html">grok filtering</a> to take files that have their type set to 'execute' and are then matching the message inside the file with "Ejecutar\s*comando\s*:\s+%{GREEDYDATA:comando}". The last config file output.conf merely takes the selected file and executes it as a shell command.</p>
-    <img src="screenshots/Haystack/22.png">
+    <img src="screenshots/Haystack/23.png">
     <p></p>
     <p class="text">So all we need to do to exploit this is create our own file in /opt/kibana/, the file name needs to start with 'logstash_', containing the following format "Ejecutar comando: [our command]" to execute a command of our choosing. Like before we'll leverage netcat to catch a reverse shell like so!</p>
     <img src="screenshots/Haystack/24.png">
