@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="/static/img/icon.png" />
-    <title>Archive</title>
+    <link rel="shortcut icon" href="/static/img/500px-Glider.svg.png" />
+    <title>Good Old Days - AUCTF 2020</title>
     <meta name="author" content="ch0p5u3y" />
-    <meta name="description" content="Just CTF stuff." />
+    <meta name="description" content="A simple OSINT challenge requiring knowledge of where webpages are archived." />
     <meta name="keywords" content="CTF, reverse, pwn, crypto, stegonography, forensics, web, misc, exploitation, c, c++, python, assembly, security" />
     <meta content="" property="fb:app_id">
     <meta content="ch0p5u3y" property="og:site_name">
@@ -15,17 +15,17 @@
     
 
     
-      <meta content="Archive" property="og:title">
+      <meta content="Good Old Days - AUCTF 2020" property="og:title">
       <meta content="website" property="og:type">
       <meta content="/static/img/kenaz.png" property="og:image">
 
     
-      <meta content="Just CTF stuff." property="og:description">
+      <meta content="A simple OSINT challenge requiring knowledge of where webpages are archived." property="og:description">
 
+      <meta name="twitter:image" content="https://ch0p5u3y.github.io/static/img/kenaz-twitter.png">
+      <meta name="twitter:title" content="Good Old Days - AUCTF 2020">
     
-      <meta name="twitter:title" content="Archive">
-      <meta name="twitter:image:src" content="/static/img/kenaz-twitter.png">
-      <meta name="twitter:description" content="Just CTF stuff.">
+      <meta name="twitter:description" content="A simple OSINT challenge requiring knowledge of where webpages are archived.">
     
 
     
@@ -50,7 +50,7 @@
     <div class="container">
       <div class="col-sm-3">
         <div class="fixed-condition">
-		<img class="rounded" src="/static/img/profile.png"
+		<img class="rounded" src="/static/img/kenaz.png"
 		height="90" width="90">
           <h1 class="author-name"><a href="/">ch0p5u3y</a></h1>
           
@@ -84,35 +84,33 @@
         </div>
         <!-- end /.fixed-condition -->
       </div>
-      <div class="col-sm-8 col-offset-1 main-layout">
+      <div class="col-sm-9 main-layout">
         <div id="home">
-  <h1>Archive</h1>
+  <h1>Good Old Days - AUCTF 2020</h1>
   <hr />
 
-  <ul class="archives">
-    <li>
-	2020
-	<ul>
-	  <li id="no"><p>April 08 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="/posts/2020/AUCTF_2020-Good_Old_Days.html">AUCTF 2020 - Good Old Days</a></p></li>
-        </ul>
-    </li>
-
-    <li>
-    	2019
-	<ul>
-          <li id="no"><p>December 29 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="/posts/2019/watevrCTF2019-voting_machine_1.html">watevrCTF 2019 - voting_machine_1</a></p></li>
-	  <li id="no"><p>November 18 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <a href="/posts/2019/Haystack.html">Haystack - HackTheBox</a></p></li>
-	  <li id="no"><p>October 22 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <a href="/posts/2019/flawconctf2019-MyPlace.html">FlawconCTF2019 - MyPlace</a></p></li>
-	  <li id="no"><p>September 23 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="/posts/2019/nactf2019-reversible_sneaky_algorithm_0.html">NACTF 2019 - reversible_sneaky_algorithm#0</a></p></li>
-	  <li id="no"><p>September 23 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="/posts/2019/silkyctf_0x01.html">Silky-CTF: 0x02</a></p></li>
-	  <li id="no"><p>September 23 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="/posts/2019/silkyctf_0x01.html">Silky-CTF: 0x01</a></p></li>
-	  <li id="no"><p>September 03 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="/posts/2019/tokyoWesterns2019-real-baby-rsa.html">TokyoWesterns CTF 2019 - real-baby-rsa</a></p></li>
-	  <li id="no"><p>September 03 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="/posts/2019/chaoscommunicationcamp2019-flagconverterpart1.html">Chaos Communication Camp 2019 - flagconverterpart1</a></p></li>
-	  <li id="no"><p>September 03 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="/posts/2019/hackcon2019-weird_text.html">HackCon 2019 - weird_test</a></p></li> 
-	  <li id="no"><p>September 03 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="/posts/2019/redpwnctf2019-genericCrackmeRedux.html">RedpwnCTF 2019 - genericCrackmeRedux</a></p></li>
-	</ul>
-    </li>
+  <ul class="posts">
+    <h3 id="timedate">Fri, 03 April 2020, 13:00 UTC — Mon, 06 April 2020, 04:00 UTC</h3>
+    <p></p>
+    <p class="text">Summary: A simple OSINT challenge requiring knowledge of where webpages are archived.</p>
     
+    <p class="text">Starting off we get this simple description to go off. Judging from this it's sensible to assume we need to look at archived pages of this site.</p>
+    <img src="screenshots/Good_Old_Days/1.png">
+    <p></p>
+    <p class="text">If we search the site up on the wayback machine we find that there are indeed 4 captures listed for the sites homepage.</p>
+    <img src="screenshots/Good_Old_Days/2.png">
+    <p></p>
+    <p class="text">Looking at the earliest entry of the homepage there doesn't seem to be anything of interest.</p>
+    <img src="screenshots/Good_Old_Days/3.png">
+    <p></p>
+    <p class="text">However if we go over to the 'Users' page we can see that this page has been archived 3 times.</p>
+    <img src="screenshots/Good_Old_Days/4.png">
+    <p></p>
+    <p class="text">As we can see they are all archived on the same date, and if we go to the second entry...</p>
+    <img src="screenshots/Good_Old_Days/5.png">
+    <p></p>
+    <p class="text">We find our flag at the bottom of the page!</p>
+    <img src="screenshots/Good_Old_Days/6.png">
   </ul>
 </div><!-- end #home -->
 
@@ -134,4 +132,5 @@
     <script src="/static/js/projects.js"></script>
   </body>
 </html>
+
 
