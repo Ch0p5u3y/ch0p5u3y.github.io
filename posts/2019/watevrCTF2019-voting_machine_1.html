@@ -94,7 +94,7 @@
     <p></p>
     <p class="text">Summary: A simple pwn/binary exploitation challenge requiring basic knowledge of return oriented programming along with minimal reverse engineering experience and basic python scripting skills.</p>
     
-    <p class="text">Starting off we are presented with a standard ELF file, which when we run asks us for a number of 0 to 10, then exits once our input is passed.</p>
+    <p class="text">Starting off we are presented with a standard <a href="https://github.com/Ch0p5u3y/CTF_files/blob/master/2019/voting_machine_1/kamikaze">ELF file</a>, which when we run asks us for a number of 0 to 10, then exits once our input is passed.</p>
     <img src="screenshots/voting_machine_1/1.png">
     <p></p>
     <p class="text">Analysing the assembly code of this binary using radare2 we notice that the gets function is used to take our input, this function is vulnerable to buffer overflows!</p>
