@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/500px-Glider.svg.png" />
+    <title>bof to the top - DawgCTF 2020</title>
+    <meta name="author" content="ch0p5u3y" />
+    <meta name="description" content="A simple pwn/binary exploitation challenge requiring basic knowledge of assembly language and registers, return oriented programming, minimal reverse engineering experience and python scripting skills." />
+    <meta name="keywords" content="CTF, reverse, pwn, crypto, stegonography, forensics, web, misc, exploitation, c, c++, python, assembly, security" />
+    <meta content="" property="fb:app_id">
+    <meta content="ch0p5u3y" property="og:site_name">
+
+    
+
+    
+      <meta content="bof to the top - DawgCTF 2020" property="og:title">
+      <meta content="website" property="og:type">
+      <meta content="/static/img/kenaz.png" property="og:image">
+
+    
+      <meta content="A simple pwn/binary exploitation challenge requiring basic knowledge of assembly language and registers, return oriented programming, minimal reverse engineering experience and python scripting skills." property="og:description">
+
+      <meta name="twitter:image" content="https://ch0p5u3y.github.io/static/img/kenaz-twitter.png">
+      <meta name="twitter:title" content="bof to the top - DawgCTF 2020">
+    
+      <meta name="twitter:description" content="A simple pwn/binary exploitation challenge requiring basic knowledge of assembly language and registers, return oriented programming, minimal reverse engineering experience and python scripting skills.">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300italic,300,400italic,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+		<img class="rounded" src="/static/img/kenaz.png"
+		height="90" width="90">
+          <h1 class="author-name"><a href="/">ch0p5u3y</a></h1>
+          
+            <div class="profile-about">
+              Seek truths.
+            </div>
+          
+          <div class="social">
+            <ul>
+               
+                <li><a href="https://twitter.com/ch0p5u3y" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              
+                <li><a href="https://github.com/ch0p5u3y" target="_blank"><i class="fa fa-github"></i></a></li>
+
+		<li><a href="https://www.reddit.com/user/ch0p5u3y" target="_blank"><i class="fa fa-reddit-square"></i></a></li>
+              
+            </ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <strong>Navigation</strong>
+            <li><a href="/">Home</a></li>
+            
+              <li><a class="about" href="/about/">About</a></li>
+            
+              <li><a class="about" href="/categories/">Categories</a></li>
+            
+              <li><a class="about" href="/archive/">Archive</a></li>
+            
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      <div class="col-sm-9 main-layout">
+        <div id="home">
+  <h1>bof to the top - DawgCTF 2020</h1>
+  <hr />
+
+  <ul class="posts">
+    <h3 id="timedate">Fri, 10 April 2020, 22:00 UTC — Sun, 12 April 2020, 22:00 UTC</h3>
+    <p></p>
+    <p class="text">Summary: A simple pwn/binary exploitation challenge requiring basic knowledge of assembly language and registers, return oriented programming, minimal reverse engineering experience and python scripting skills.</p>
+    
+    <p class="text">Starting off we are given a <a href="https://github.com/Ch0p5u3y/CTF_files/blob/master/2020/bof_to_the_top/bof">binary</a> along with some <a href="https://github.com/Ch0p5u3y/CTF_files/blob/master/2020/bof_to_the_top/bof.c">C code</a>, and as we can see when we run the binary it prompts us for input twice and then ceases execution.</p>
+    <img src="screenshots/bof_to_the_top/1.png">
+    <p></p>
+    <img src="screenshots/bof_to_the_top/2.png">
+    <p></p>
+    <p class="text">Next we test to see if the binary is vulnerable to overflow by dumping a bunch NOPs into it. And as we can see it's definitely vuln!</p>
+    <img src="screenshots/bof_to_the_top/3.png">
+    <p></p>
+    <p class="text">If we analyse the binary's main funnction we can see three functions are called here. We can ignore the first two but the third one is where we want to look.</p>
+    <img src="screenshots/bof_to_the_top/4.png">
+    <p></p>
+    <p class="text">As we can see by analysing this function it uses the gets function from libc, which as we know is vulnerable to buffer overflows. But where do we go from here?</p>
+    <img src="screenshots/bof_to_the_top/5.png">
+    <p></p>
+    <p class="text">If we use objdump to take a look at all of the binary's code we can find an unused function called audition. Let's see if we can redirect the program's flow into this function by overwriting the EIP register.</p>
+    <img src="screenshots/bof_to_the_top/6.png">
+    <p></p>
+    <p class="text">After a little messing around we can identify that the threshold of the overflow is at 62 characters, anything after this will spill into other registers and onto the stack. Here we use 4 B characters to fill the EIP register, which will point the program to the address of the next instruction. As we can see the program crashes because 0x42424242 is not a valid instruction address.</p>
+    <img src="screenshots/bof_to_the_top/7.png">
+    <p></p>
+    <img src="screenshots/bof_to_the_top/8.png">
+    <p></p>
+    <p class="text">Let's try the overflow again but this time we'll fill EIP with the address for the starting instruction of the audition function. First we set a breakpoint in the audition function, this will help us confirm whether or not we have redirected the program flow into it, next we trigger the buffer overflow again this time filling EIP with audition's address. As we can see we successfully hit our breakpoint confirming we were able to enter this unused function. So what next?</p>
+    <img src="screenshots/bof_to_the_top/9.png">
+    <p></p>
+    <img src="screenshots/bof_to_the_top/10.png">
+    <p></p>
+    <p class="text">Now we'll take a closer look at the audition function to determine our next steps.</p>
+    <ol>
+      <li id="list" class="text"><p class="text">First we notice that there are two arguments that can be passed to this function.</p></li>
+      <li id="list" class="text"><p class="text">Secondly if we take a look at the comparison instructions, the arguments are being compared to the values 0x4b0 (1200) and 0x16e (366).</p></li>
+      <li id="list" class="text"><p class="text">Finally if both of those comparisons check out a call to system is made. This call is what we want the program to execute.</p></li>
+    </ol>
+    <img src="screenshots/bof_to_the_top/11.png">
+    <p></p>
+    <p class="text">Judging from what we know we need to pass two integers to the audition function. Before we can do this we have to overwrite the return address with junk otherwise our arguments will be treated as an address instead of integers. So here we trigger the overflow again, enter the audition function and insert four A characters to overwrite the return address in ESP.</p>
+    <img src="screenshots/bof_to_the_top/12.png">
+    <p></p>
+    <p class="text">As we can see we have successfully overwritten ESP with our junk data, and when we continue execution we can see that the program tries to return to our junk data treating it as an address trying to jump to it's instruction leading to a crash.</p>
+    <img src="screenshots/bof_to_the_top/13.png">
+    <p></p>
+    <img src="screenshots/bof_to_the_top/14.png">
+    <p></p>
+    <p class="text">With the return address overwrite taken care of we can now pass our arguments to the audition function. Similar to the <a href="https://docs.python.org/2/library/struct.html">struct</a> library we can use the <a href="https://github.com/Gallopsled/pwntools">pwntools</a> python library to pack the address we want to return to and our arguments into 32 bit sets of data so they fit inside their intended registers. Once they are passed and parsed by the binary we can see a new string appear on the stack that seems to be referencing the cat command and a file called 'flag.txt'.</p>
+    <img src="screenshots/bof_to_the_top/15.png">
+    <p></p>
+    <img src="screenshots/bof_to_the_top/16.png">
+    <p></p>
+    <p class="text">If we take another look at the binary's source code, we can see that once the condition for the functions two arguments are met it calls system with the string we just saw appear on the stack as an argument. This is how we obtain the flag!</p>
+    <img src="screenshots/bof_to_the_top/17.png">
+    <p></p>
+    <p class="text">First we'll test this out locally just to confirm our theory of how the program should work. As we can see the program executes the call to system but can't find the 'flag.txt' file. But now we know it works we can try this out remotely.</p>
+    <img src="screenshots/bof_to_the_top/18.png">
+    <p></p>
+    <p class="text">To pull this off remotely we had to write a python <a href="https://github.com/Ch0p5u3y/CTF_files/blob/master/2020/bof_to_the_top/solve.py">script</a> utilising the pwntools library, as simply piping the payload into netcat resulted in the remote binary hanging. Once we run the completed script pwntools will enter interactive mode and all we need to do is hit enter to get the flag!</p>
+    <img src="screenshots/bof_to_the_top/19.png">
+    <p></p>
+  </ul>
+</div><!-- end #home -->
+
+        <footer>
+          &copy; ch0p5u3y 2019
+        </footer>
+      </div>
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+  </body>
+</html>
+
+
