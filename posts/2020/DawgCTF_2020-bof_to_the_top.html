@@ -108,7 +108,7 @@
     <p class="text">As we can see by analysing this function it uses the gets function from libc, which as we know is vulnerable to buffer overflows. But where do we go from here?</p>
     <img src="screenshots/bof_to_the_top/5.png">
     <p></p>
-    <p class="text">If we use objdump to take a look at all of the binary's code we can find an unused function called audition. Let's see if we can redirect the program's flow into this function by overwriting the EIP register.</p>
+    <p class="text">If we use objdump to take a look at all of the binary's code we can find an unused function called audition. Let's see if we can redirect the program's flow into this function by overwriting the return address stored in the EIP register.</p>
     <img src="screenshots/bof_to_the_top/6.png">
     <p></p>
     <p class="text">After a little messing around we can identify that the threshold of the overflow is at 62 characters, anything after this will spill into other registers and onto the stack. Here we use 4 B characters to fill the EIP register, which will point the program to the address of the next instruction. As we can see the program crashes because 0x42424242 is not a valid instruction address.</p>
@@ -132,7 +132,7 @@
     <p class="text">Judging from what we know we need to pass two integers to the audition function. Before we can do this we have to overwrite the return address with junk otherwise our arguments will be treated as an address instead of integers. So here we trigger the overflow again, enter the audition function and insert four A characters to overwrite the return address in ESP.</p>
     <img src="screenshots/bof_to_the_top/12.png">
     <p></p>
-    <p class="text">As we can see we have successfully overwritten ESP with our junk data, and when we continue execution we can see that the program tries to return to our junk data treating it as an address trying to jump to it's instruction leading to a crash.</p>
+    <p class="text">As we can see we have successfully overwritten the return address in ESP with our junk data, and when we continue execution we can see that the program tries to return to our junk data treating it as an address trying to jump to it's instruction leading to a crash.</p>
     <img src="screenshots/bof_to_the_top/13.png">
     <p></p>
     <img src="screenshots/bof_to_the_top/14.png">
@@ -148,7 +148,7 @@
     <p class="text">First we'll test this out locally just to confirm our theory of how the program should work. As we can see the program executes the call to system but can't find the 'flag.txt' file. But now we know it works we can try this out remotely.</p>
     <img src="screenshots/bof_to_the_top/18.png">
     <p></p>
-    <p class="text">To pull this off remotely we had to write a python <a href="https://github.com/Ch0p5u3y/CTF_files/blob/master/2020/bof_to_the_top/solve.py">script</a> utilising the pwntools library, as simply piping the payload into netcat resulted in the remote binary hanging. Once we run the completed script pwntools will enter interactive mode and all we need to do is hit enter to get the flag!</p>
+    <p class="text">To pull this off remotely we wrote a python <a href="https://github.com/Ch0p5u3y/CTF_files/blob/master/2020/bof_to_the_top/solve.py">script</a> utilising the pwntools library. Once we run the completed script pwntools will enter interactive mode and all we need to do is hit enter to get the flag!</p>
     <img src="screenshots/bof_to_the_top/19.png">
     <p></p>
   </ul>
