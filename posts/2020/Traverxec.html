@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/500px-Glider.svg.png" />
+    <title>Traverxec - HackTheBox</title>
+    <meta name="author" content="ch0p5u3y" />
+    <meta name="description" content=".PUT DESCRIPTION HERE" />
+    <meta name="keywords" content="CTF, reverse, pwn, crypto, stegonography, forensics, web, misc, exploitation, c, c++, python, assembly, security" />
+    <meta content="" property="fb:app_id">
+    <meta content="ch0p5u3y" property="og:site_name">
+
+    
+
+    
+      <meta content="Traverxec - HackTheBox" property="og:title">
+      <meta content="website" property="og:type">
+      <meta content="/static/img/kenaz.png" property="og:image">
+
+    
+      <meta content="PUT DESCRIPTION HERE." property="og:description">
+
+      <meta name="twitter:image" content="https://ch0p5u3y.github.io/static/img/kenaz-twitter.png">
+      <meta name="twitter:title" content="Traverxec - HackTheBox">
+    
+      <meta name="twitter:description" content="PUT DESCRIPTION HERE.">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300italic,300,400italic,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+		<img class="rounded" src="/static/img/kenaz.png"
+		height="90" width="90">
+          <h1 class="author-name"><a href="/">ch0p5u3y</a></h1>
+          
+            <div class="profile-about">
+              Seek truths.
+            </div>
+          
+          <div class="social">
+            <ul>
+               
+                <li><a href="https://twitter.com/ch0p5u3y" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              
+                <li><a href="https://github.com/ch0p5u3y" target="_blank"><i class="fa fa-github"></i></a></li>
+
+		<li><a href="https://www.reddit.com/user/ch0p5u3y" target="_blank"><i class="fa fa-reddit-square"></i></a></li>
+              
+            </ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <strong>Navigation</strong>
+            <li><a href="/">Home</a></li>
+            
+              <li><a class="about" href="/about/">About</a></li>
+            
+              <li><a class="about" href="/categories/">Categories</a></li>
+            
+              <li><a class="about" href="/archive/">Archive</a></li>
+            
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      <div class="col-sm-9 main-layout">
+        <div id="home">
+  <h1>Traverxec - HackTheBox</h1>
+  <hr />
+
+  <ul class="posts">
+    <h3 id="timedate">Released: 16th Nov 2019 - Retired: 11th April 2020</h3>
+    <p></p>
+    <p class="text">Summary: An easy difficulty machine hosted on HackTheBox requiring exploitation of nostromo web server and knowledge of GTFObins.</p>
+    
+    <p class="text">My friend <a href="https://github.com/TikvahTerminator">Tikvah</a> and I worked on rooting this box together!</p>
+
+    <p class="text">Starting off if we go to the machines address using a browser we are presented with a standard looking portfolio type website. If we perform some recon we don't find much in terms of content but we can identify the open ports 80 and 22, with the webserver running known as nostromo.</p>
+    <img src="screenshots/Traverxec/1.png">
+    <p></p>
+    <img src="screenshots/Traverxec/2.png">
+    <p></p>
+    <p class="text">If we check the version for this webserver we can find a particular <a href="https://github.com/jas502n/CVE-2019-16278">public exploit</a> that uses a directory traversal vulnerability that allows us to gain RCE on the hosting server.</p>
+    <img src="screenshots/Traverxec/3.png">
+    <p></p>
+    <p class="text">So our next step is to use the <a href="https://github.com/jas502n/CVE-2019-16278/blob/master/CVE-2019-16278.sh">script</a> which performs the directory traversal to gain a shell on the server. First we set up our listener to catch the reverse shell. Next we prep to run the script with our arguments, first argument being the machines IP, second being the port the web server is running on and third being the command we want to execute, here we have chosen nc to connect back to our machine.</p>
+    <img src="screenshots/Traverxec/4.png">
+    <p></p>
+    <img src="screenshots/Traverxec/5.png">
+    <p></p>
+    <p class="text">Once we run the script all we need to do is wait a few seconds and we have our shell!</p>
+    <img src="screenshots/Traverxec/6.png">
+    <p></p>
+    <p class="text">With a foothold now in place we want to begin enumerating to find a way to escalate our privileges. For this we'll use the <a href="https://github.com/rebootuser/LinEnum">LinEnum script</a>, first we have to host the file on our own machine and then with our foothold shell grab the script with wget.</p>
+    <img src="screenshots/Traverxec/7.png">
+    <p class="text" style="text-align: center;"><i>Attacking machine</i></p>
+    <img src="screenshots/Traverxec/8.png">
+    <p class="text" style="text-align: center;"><i>Victim machine</i></p>
+    <p class="text">Once we've ran the script and placed the results in a file we want to pass said file back to our machine for further analysis. For this task we can use nc.</p>
+    <img src="screenshots/Traverxec/9.png">
+    <p class="text" style="text-align: center;"><i>Victim machine</i></p>
+    <img src="screenshots/Traverxec/10.png">
+    <p class="text" style="text-align: center;"><i>Attacking machine</i></p>
+    <p class="text">Looking through the results we located the '.htpasswd' file, exfiltrated it and cracked it. However we couldn't find where we needed to use this password.</p>
+    <img src="screenshots/Traverxec/11.png">
+    <p></p>
+    <img src="screenshots/Traverxec/13.png">
+    <p></p>
+    <p class="text">Taking another look through the results we found that the public_www directory did indeed exist and it was located in the user david's home directory, we didn't have permissions in his home directory but we did in the public_www directory. Here we found an interesting tarball file.</p>
+    <img src="screenshots/Traverxec/14.png">
+    <p></p>
+    <img src="screenshots/Traverxec/15.png">
+    <p></p>
+    <p class="text">Again using nc we exfiltrated the file to our own machine for further analysis.</p>
+    <img src="screenshots/Traverxec/16.png">
+    <p class="text" style="text-align: center;"><i>Victim machine</i></p>
+    <img src="screenshots/Traverxec/17.png">
+    <p class="text" style="text-align: center;"><i>Attacking machine</i></p>
+    <p class="text">When we unpack the contents of the tarball we find a public rsa key which can be used by us to login into ssh without david's password. The only problem is we do need a passphrase along with this key.</p>
+    <img src="screenshots/Traverxec/18.png">
+    <p></p>
+    <img src="screenshots/Traverxec/19.png">
+    <p></p>
+    <p class="text">If we use a module in <a href="https://github.com/magnumripper/JohnTheRipper">John The Ripper's</a> jumbo distribution called <a href="https://github.com/magnumripper/JohnTheRipper/blob/bleeding-jumbo/run/ssh2john.py">ssh2john</a> we can covert the key to a format that we can crack using John and the trusty rockyou.txt wordlist. As you can see the passphrase is hunter.</p>
+    <img src="screenshots/Traverxec/20.png">
+    <p></p>
+    <img src="screenshots/Traverxec/21.png">
+    <p></p>
+    <p class="text">Now all that's left to do is to use ssh, with the -i (identity_file) option with it's argument being our ssh key, to login into the machine as david. As you can see it prompts us for the passphrase and once entered we now have access to david's account!</p>
+    <img src="screenshots/Traverxec/22.png">
+    <p></p>
+    <p class="text">Now we are in david's home directory we find another directory there called bin which has a shell script in it called server-stats.sh. When we run this script it prints a few stats regarding the server and then prints the last 5 logs left by the nostromo. To do this it opens the logs in journalctl, invoked with sudo, and pipes the output into the cat command.</p>
+    <img src="screenshots/Traverxec/23.png">
+    <p></p>
+    <img src="screenshots/Traverxec/24.png">
+    <p></p>
+    <p class="text">With not much else to go off of at this point, we copy the script into a different file so we can play around with it and see what makes it tick.</p>
+    <img src="screenshots/Traverxec/25.png">
+    <p></p>
+    <p class="text">After a lot of experimentation and no success we took to the hackthebox forums and found a hint mentioning <a href="">GTFObins</a>. They are basically various unix binaries that allow the user to escape into a shell from a perhaps limited environment, read and write to files, upload or download files etc. And looking at the entry for journalctl we can see that this binary definitely allows us to drop into a shell.</p>
+    <img src="screenshots/Traverxec/27.png">
+    <p></p>
+    <p class="text">Taking a second look at the script it's actually quite obvious now how simple this exploit is. When the script runs journalctl as sudo and then pipes it into cat it loses it's root privileges. So all we need to do is comment out the pipe so journalctl is ran with no interruptions.</p>
+    <img src="screenshots/Traverxec/26.png">
+    <p></p>
+    <p class="text">Once we run the script and enter the journactl process all that's left to do is perform the shell escape and we have root!    ٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎᵎ</p>
+    <img src="screenshots/Traverxec/28.png">
+    <p></p>
+    <img src="screenshots/Traverxec/29.png">
+    <p></p>
+  </ul>
+</div><!-- end #home -->
+
+        <footer>
+          &copy; ch0p5u3y 2019
+        </footer>
+      </div>
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+  </body>
+</html>
+
+
