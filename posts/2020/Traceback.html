@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/500px-Glider.svg.png" />
+    <title>Traceback - HackTheBox</title>
+    <meta name="author" content="ch0p5u3y" />
+    <meta name="description" content="An easy difficulty machine hosted on HackTheBox requiring basic OSINT skills, exploitation of permission misconfigurations, knowledge of ssh keys and exploitation of motd." />
+    <meta name="keywords" content="CTF, reverse, pwn, crypto, stegonography, forensics, web, misc, exploitation, c, c++, python, assembly, security" />
+    <meta content="" property="fb:app_id">
+    <meta content="ch0p5u3y" property="og:site_name">
+
+    
+
+    
+      <meta content="Traceback - HackTheBox" property="og:title">
+      <meta content="website" property="og:type">
+      <meta content="/static/img/kenaz.png" property="og:image">
+
+    
+      <meta content="An easy difficulty machine hosted on HackTheBox requiring basic OSINT skills, knowledge of how to exploit permission misconfigurations, knowledge of ssh keys and exploitation of motd." property="og:description">
+
+      <meta name="twitter:image" content="https://ch0p5u3y.github.io/static/img/kenaz-twitter.png">
+      <meta name="twitter:title" content="Traceback - HackTheBox">
+    
+      <meta name="twitter:description" content="An easy difficulty machine hosted on HackTheBox requiring basic OSINT skills, knowledge of how to exploit permission misconfigurations, knowledge of ssh keys and exploitation of motd.">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300italic,300,400italic,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+		<img class="rounded" src="/static/img/kenaz.png"
+		height="90" width="90">
+          <h1 class="author-name"><a href="/">ch0p5u3y</a></h1>
+          
+            <div class="profile-about">
+              Seek truths.
+            </div>
+          
+          <div class="social">
+            <ul>
+               
+                <li><a href="https://twitter.com/ch0p5u3y" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              
+                <li><a href="https://github.com/ch0p5u3y" target="_blank"><i class="fa fa-github"></i></a></li>
+
+		<li><a href="https://www.reddit.com/user/ch0p5u3y" target="_blank"><i class="fa fa-reddit-square"></i></a></li>
+              
+            </ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <strong>Navigation</strong>
+            <li><a href="/">Home</a></li>
+            
+              <li><a class="about" href="/about/">About</a></li>
+            
+              <li><a class="about" href="/categories/">Categories</a></li>
+            
+              <li><a class="about" href="/archive/">Archive</a></li>
+            
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      <div class="col-sm-9 main-layout">
+        <div id="home">
+  <h1>Traceback - HackTheBox</h1>
+  <hr />
+
+  <ul class="posts">
+    <h3 id="timedate">Released: 14 Mar 2020 - Retired: 15 Aug 2020 </h3>
+    <p></p>
+    <p class="text">Summary: An easy difficulty machine hosted on HackTheBox requiring basic OSINT skills, knowledge of how to exploit permission misconfigurations, knowledge of ssh keys and exploitation of motd.</p>
+    
+    <p class="text">Kicking off, we find that both ports 22 and 80 are open and we've identified the software running on each port. When we navigate to the web page it seems to have been... defaced???</p>
+    <img src="screenshots/Traceback/1.png">
+    <p></p>
+    <img src="screenshots/Traceback/2.png">
+    <p></p>
+    <p class="text">If we take a look at the page source we can find a comment near the bottom with a cryptic message.</p>
+    <img src="screenshots/Traceback/3.png">
+    <p></p>
+    <p class="text">And if we search this phrase we find a repo under the name of the person who defaced the site as well as the message we found, which shares the same name as their web shells repo.</p>
+    <img src="screenshots/Traceback/4.png">
+    <p></p>
+    <p class="text">Here we find a list of a bunch of different web shells and by trying each one we're able to identify 'smevk.php' as the one installed on the machine!</p>
+    <img src="screenshots/Traceback/5.png">
+    <p></p>
+    <img src="screenshots/Traceback/6.png">
+    <p></p>
+    <p class="text">To find the credentials for the shell all we need do is check out it's code on the aformentioned repo and we're in!</p>
+    <img src="screenshots/Traceback/7.png">
+    <p></p>
+    <img src="screenshots/Traceback/8.png">
+    <p></p>
+    <p class="text">Now most of what we need is already built into smevk.php but it's always better to have direct reverse shell access so we can move around in the system freely. Here we will upload our <a href="http://pentestmonkey.net/tools/web-shells/php-reverse-shell">reverse shell</a>, set up our nc listener and call the script via our browser to catch the connection on our listener!</p>
+    <img src="screenshots/Traceback/9.png">
+    <p></p>
+    <img src="screenshots/Traceback/10.png">
+    <p></p>
+    <p class="text">Next we want to enumerate the box and search for a way to escalate our priveleges. As per usual, we will transfer the ever handy <a href="https://github.com/rebootuser/LinEnum">LinEnum script</a> onto the machine using nc. For guidance on how to do this check out the following <a href="https://nakkaya.com/2009/04/15/using-netcat-for-file-transfers/">tutorial</a>.</p>
+    <img src="screenshots/Traceback/11.png">
+    <p class="text" style="text-align: center;"><i>Victim machine</i></p>
+    <p></p>
+    <img src="screenshots/Traceback/12.png">
+    <p class="text" style="text-align: center;"><i>Attacking machine</i></p>
+    <p></p>
+    <p class="text">With the script where we now want it, we make it executable, run it and redirect the output to a file we'll name 'report'.</p>
+    <img src="screenshots/Traceback/13.png">
+    <p></p>
+    <p class="text">Now we want to exfiltrate our report to our attacking machine. We can't use the same method for transferring LinEnum this time, so we use python3's built in http.server function to host our own mini webserver hosting our report. Then from our attacking machine we grab the report using wget.</p>
+    <img src="screenshots/Traceback/14.png">
+    <p></p>
+    <img src="screenshots/Traceback/15.png">
+    <p></p>
+    <p class="text">Looking through the report we find that a particular program called 'luvit' can be ran by webadmin without needing a password to sudo. The program is owned by sysadmin, therefore this seems to be our path towards privelege escalation.</p>
+    <img src="screenshots/Traceback/16.png">
+    <p></p>
+    <p class="text">As you can see we can use the '-u' option for sudo to specify that we want to run luvit as sysadmin. <a href="https://luvit.io/">luvit</a> is a command line tool that doubles as a scripting platform similar to node but is written in Lua and allows us to run Lua functions/scripts.</p>
+    <img src="screenshots/Traceback/17.png">
+    <p></p>
+    <p class="text">Here we use the 'execute' function in Lua's <a href="http://lua-users.org/wiki/OsLibraryTutorial">OS library</a>, which will run whatever command we pass as an argument. As you can see we are successfly able to spawn ourselves a shell as sysadmin and grab the user flag! (*•̀ᴗ•́*)و ̑̑</p>
+    <img src="screenshots/Traceback/18.png">
+    <p></p>
+    <p class="text">Before we attempt anything else we first want to upgrade our shell so it's more convenient to use, our current one is pretty tacky. For guidance on this check out this <a href="https://blog.ropnop.com/upgrading-simple-shells-to-fully-interactive-ttys/">guide</a>!</p>
+    <img src="screenshots/Traceback/19.png">
+    <p class="text" style="text-align: center;"><i>Checking Term and stty requirements</i></p>
+    <p></p>
+    <img src="screenshots/Traceback/20.png">
+    <p class="text" style="text-align: center;"><i>Upgrading shell</i></p>
+    <p></p>
+    <p class="text">Our next step was to gain root access. This time LinEnum didn't find anything for us to work with and it seemed like we had hit a wall. However, after some searching we found a tool called <a href="https://github.com/DominicBreuker/pspy">pspy</a> which allowed us to see processes running in real time without the need to have root access!</p>
+    <img src="screenshots/Traceback/21.png">
+    <p></p>
+    <p class="text">So we download the binary for pspy and using nc we transfer it to the victim machine.</p>
+    <img src="screenshots/Traceback/22.png">
+    <p class="text" style="text-align: center;"><i>Attacking machine</i></p>
+    <p></p>
+    <img src="screenshots/Traceback/23.png">
+    <p class="text" style="text-align: center;"><i>Victim machine</i></p>
+    <p></p>
+    <p class="text">When we make the binary executable and run it, pspy will start printing out any processes it detects. There's an unusual process/cronjob here which seems to deal with backups and is ran every 30 seconds. It seems to be copying the contents of one folder into another.</p>
+    <img src="screenshots/Traceback/24.png">
+    <p></p>
+    <img src="screenshots/Traceback/25.png">
+    <p></p>
+    <p class="text">The folder the backups are being copied to seem to hold a bunch of different shell scripts that print various information. Let's look into 'motd' for some better context on what this is used for.</p>
+    <img src="screenshots/Traceback/26.png">
+    <p></p>
+    <p class="text">From what we can gather motd or 'message of the day' is a file that is displayed/run after a successful login. update-motd installs a cronjob which executes each script in /etc/update-motd.d and writes the output of each script /etc/motd.</p>
+    <img src="screenshots/Traceback/27.png">
+    <p></p>
+    <img src="screenshots/Traceback/27-1.png">
+    <p></p>
+    <p class="text">If we take a look at the permissions of the script we can see that they are owned by the root user. It is then possible that these scripts are being ran as root when executed. The only problem is, how do we log in to trigger motd?</p>
+    <img src="screenshots/Traceback/28.png">
+    <p></p>
+    <p class="text">Well now that we have user access to the box we can actually generate our own ssh key to login to the server without a password! For info on how this works check out this <a href="https://linuxhint.com/setup_ssh_without_passwords/">tutorial</a>.</p>
+    <img src="screenshots/Traceback/29.png">
+    <p></p>
+    <p class="text">It's best practice to use 'ssh-copy-id' to transfer our key to the server but here, I opted to use nc instead.</p>
+    <img src="screenshots/Traceback/30.png">
+    <p class="text" style="text-align: center;"><i>Attacking machine</i></p>
+    <p></p>
+    <img src="screenshots/Traceback/31.png">
+    <p class="text" style="text-align: center;"><i>Victim machine</i></p>
+    <p></p>
+    <p class="text">Once the key is on the server we can inject it into sysadmin's authorized keys file and test it out to see if we can login. And, bingo!</p>
+    <img src="screenshots/Traceback/32.png">
+    <p></p>
+    <img src="screenshots/Traceback/33.png">
+    <p></p>
+    <p class="text">Next we'll run a quick test to confirm that motd works the way we believe it does. We inject some dummy data into the '00-header' script and login before the modified script can be overwritten by the backups (30 second time frame). And as we can see, once we login successfully our dummy data is displayed.</p>
+    <img src="screenshots/Traceback/34.png">
+    <p></p>
+    <img src="screenshots/Traceback/35.png">
+    <p></p>
+    <p class="text">Next let's test commands and try to see if we can confirm our privelege. This time we inject the script with the 'whoami' command in hopes it will run and tell us which user is running said script. Once we login, we can see that motd displays 'root' meaning it ran our command and we now have root privelege code execution!</p>
+    <img src="screenshots/Traceback/36.png">
+    <p></p>
+    <img src="screenshots/Traceback/37.png">
+    <p></p>
+    <p class="text">Now we want to reach our goal of root shell access. For this we will inject a php one liner reverse shell into the script in hopes we can catch the connection. The one liner can be found <a href="http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet">here</a> (note the backslashes in the screenshot used to string escape the quotation mark and dollar characters).</p>
+    <img src="screenshots/Traceback/38.png">
+    <p></p>
+    <p class="text">Now all that's left to do is setup our nc listener, run the modified script, login to ssh and boom! We now have root access and the root flag. (´⌣`ʃƪ)</p>
+    <img src="screenshots/Traceback/39.png">
+    <p></p>
+    <img src="screenshots/Traceback/40.png">
+  </ul>
+</div><!-- end #home -->
+
+        <footer>
+          &copy; ch0p5u3y 2020
+        </footer>
+      </div>
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+  </body>
+</html>
+
+
