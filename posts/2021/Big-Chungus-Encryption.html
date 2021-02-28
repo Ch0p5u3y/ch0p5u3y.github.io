@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/static/img/500px-Glider.svg.png" />
+    <title>Big Chungus Encryption - pwnED 2</title>
+    <meta name="author" content="ch0p5u3y" />
+    <meta name="description" content="A simple reverse engineering challenge requiring basic knowledge in assembly lanuage and python scripting as well as experience in debugging." />
+    <meta name="keywords" content="CTF, reverse, pwn, crypto, stegonography, forensics, web, misc, exploitation, c, c++, python, assembly, security" />
+    <meta content="" property="fb:app_id">
+    <meta content="ch0p5u3y" property="og:site_name">
+
+    
+
+    
+      <meta content="Big Chungus Encryption - pwnED 2" property="og:title">
+      <meta content="website" property="og:type">
+      <meta content="/static/img/kenaz.png" property="og:image">
+
+    
+      <meta content="A simple reverse engineering challenge requiring basic knowledge in assembly lanuage and python scripting as well as experience in debugging." property="og:description">
+
+      <meta name="twitter:image" content="https://ch0p5u3y.github.io/static/img/kenaz-twitter.png">
+      <meta name="twitter:title" content="Big Chungus Encryption - pwnED 2">
+    
+      <meta name="twitter:description" content="A simple reverse engineering challenge requiring basic knowledge in assembly lanuage and python scripting as well as experience in debugging.">
+    
+
+    
+
+    <!-- Font awesome icons -->
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/static/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:400,300italic,300,400italic,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/super-search.css">
+    <link rel="stylesheet" href="/static/css/thickbox.css">
+    <link rel="stylesheet" href="/static/css/projects.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+
+    
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-3">
+        <div class="fixed-condition">
+		<img class="rounded" src="/static/img/kenaz.png"
+		height="90" width="90">
+          <h1 class="author-name"><a href="/">ch0p5u3y</a></h1>
+          
+            <div class="profile-about">
+              Seek truths.
+            </div>
+          
+          <div class="social">
+            <ul>
+               
+                <li><a href="https://twitter.com/ch0p5u3y" target="_blank"><i class="fa fa-twitter"></i></a></li>
+              
+                <li><a href="https://github.com/ch0p5u3y" target="_blank"><i class="fa fa-github"></i></a></li>
+
+		<li><a href="https://www.reddit.com/user/ch0p5u3y" target="_blank"><i class="fa fa-reddit-square"></i></a></li>
+              
+            </ul>
+          </div>
+          <hr />
+          <ul class="sidebar-nav">
+            <strong>Navigation</strong>
+            <li><a href="/">Home</a></li>
+            
+              <li><a class="about" href="/about/">About</a></li>
+            
+              <li><a class="about" href="/categories/">Categories</a></li>
+            
+              <li><a class="about" href="/archive/">Archive</a></li>
+            
+          </ul>
+        </div>
+        <!-- end /.fixed-condition -->
+      </div>
+      <div class="col-sm-9 main-layout">
+        <div id="home">
+  <h1>Big Chungus Encryption - pwnED 2</h1>
+  <hr />
+
+  <ul class="posts">
+    <h3 id="timedate">Sat, 27 February 2021, 10:00 BST - Sun, 28 February 2021, 18:00 BST</h3>
+    <p></p>
+    <p class="text">Summary: A simple reverse engineering challenge requiring basic knowledge in assembly lanuage and python scripting as well as experience in debugging.</p>
+    
+    <p class="text">We start off with an ELF file that has no debugging symbols, meaning we can't analyse it using GDB.</p>
+    <img src="screenshots/Big Chungus Encryption/1.png">
+    <p></p>
+    <p class="text">We can however debug and analyse the binary using radare2. From the screenshot you can see we have just the main fucntion to analyse and no extra custom functions.</p>
+    <img src="screenshots/Big Chungus Encryption/2.png">
+    <p></p>
+    <p class="text">Using visual mode to better see where the jumps of the program lead to, we can see that the first jump is right after a comparison of the value in register RAX to the hex value 0x20, which equals 32 in decimal.
+    This comparison comes right after a call to the strlen function which will fetch the integer value of the specified strings length and save the result in RAX. It's safe to assume the program is running our input through strlen but, let's run it first and see what happens.</p>
+    <img src="screenshots/Big Chungus Encryption/3.png">
+    <p></p>
+    <p class="text">As you can see it tells us that our input is incorrect but, even if we specify a string which has 32 characters we get the same message.</p>
+    <img src="screenshots/Big Chungus Encryption/4.png">
+    <p></p>
+    <p class="text">Luckily we can perform dynamic analysis on the program as it runs through radare2. The memory addresses look much different when we run the program in debug mode.</p>
+    <img src="screenshots/Big Chungus Encryption/5.png">
+    <p></p>
+    <p class="text">Here we set a breakpoint just after the jump that would be taken if the previous comparison instruction checks out as true. If we hit the breakpoint this will confirm that we do indeed need to feed the program 32 bytes of input.</p>
+    <img src="screenshots/Big Chungus Encryption/6.png">
+    <p></p>
+    <p class="text">And as you can see, we hit our breakpoint just fine. This means we are able to successfully perform dynamic analysis!</p>
+    <img src="screenshots/Big Chungus Encryption/7.png">
+    <p></p>
+    <p class="text">Now we want to analyse the next comparison instruction. The value of register EAX is being compared to the hexadecimal value of 0x1f, which is 31 in decimal. The jump instruction here 'jbe' stands for 'jump if below or equal to' and operates in a similar fashion to jle the only difference being, an unsigned comparison is performed. As we can see, if this check fails then the program will tell us we have the correct flag! And if it passes as true it appears to initialise a loop.</p>
+    <img src="screenshots/Big Chungus Encryption/8.png">
+    <p></p>
+    <p class="text">This loop is the meat of the program which we want to reverse engineer. The comparison being made is between the registers DL and AL, these are 8 bit segments of EDX and EAX respecitively meaning they will hold one byte of data each. As we can see there is a strange hardcoded string being loaded into RDX. It also appears our input is loaded into RCX. A byte is taken from each of these values, with the byte from our input being xor'd with the hexadecimal value of 0x19 which is 25 in decimal. From this we can assume that the loop is comparing our input after it has been xor'd to the hardcoded string byte by byte.</p>
+    <img src="screenshots/Big Chungus Encryption/9.png">
+    <p></p>
+    <p class="text">To confirm this we will run the program in debug mode again via radare2, set a breakpoint in the loop, and print out the values of the registers as we step through the program. As you can see we confirm that our input is loaded into RCX, we can also see the value of our byte in EAX before and after it's xor'd and finally, we can see the values of both AL and DL. Now we have all the information we need to reverse the encrypted flag!</p>
+    <img src="screenshots/Big Chungus Encryption/10.png">
+    <p></p>
+    <p class="text">By using a simple python <a href="https://github.com/Ch0p5u3y/CTF_files/blob/master/2021/Big%20Chungus%20Encryption/solve.py">script</a> we are able to recreate the loop partially and check our output against the encrypted string. When we find matching characters we add them to our flag variable and once the loop has finished we print the flag! ◟ʕ´∀`ʔ◞</p>
+    <img src="screenshots/Big Chungus Encryption/11.png">
+  </ul>
+</div><!-- end #home -->
+
+        <footer>
+          &copy; ch0p5u3y 2019
+        </footer>
+      </div>
+      <!-- end /.col-sm-8 -->
+    </div>
+    <!-- end /.container -->
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/super-search.js"></script>
+    <script src="/static/js/thickbox-compressed.js"></script>
+    <script src="/static/js/projects.js"></script>
+  </body>
+</html>
+
+
